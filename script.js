@@ -1,7 +1,6 @@
 /* =====================================================
    RAJ PHARMA EXPORTS
    JAVASCRIPT
-   VERCEL + MONGODB VERSION
 ===================================================== */
 
 
@@ -13,110 +12,84 @@ window.addEventListener("load", function () {
 
     const loader = document.getElementById("loader");
 
-    if (loader) {
+    setTimeout(function () {
+
+        loader.style.opacity = "0";
 
         setTimeout(function () {
+            loader.style.display = "none";
+        }, 600);
 
-            loader.style.opacity = "0";
-
-            setTimeout(function () {
-
-                loader.style.display = "none";
-
-            }, 600);
-
-        }, 700);
-
-    }
+    }, 700);
 
 });
+
 
 
 /* =====================================================
    NAVBAR SCROLL EFFECT
 ===================================================== */
 
-const navbar =
-    document.getElementById("navbar");
+const navbar = document.getElementById("navbar");
 
 window.addEventListener("scroll", function () {
 
-    if (navbar) {
+    if (window.scrollY > 50) {
 
-        if (window.scrollY > 50) {
+        navbar.classList.add("scrolled");
 
-            navbar.classList.add("scrolled");
+    } else {
 
-        } else {
-
-            navbar.classList.remove("scrolled");
-
-        }
+        navbar.classList.remove("scrolled");
 
     }
 
 });
 
 
+
 /* =====================================================
-   SCROLL REVEAL
+   SCROLL REVEAL ANIMATION
 ===================================================== */
 
-const revealElements =
-    document.querySelectorAll(".reveal");
+const revealElements = document.querySelectorAll(".reveal");
 
-if ("IntersectionObserver" in window) {
+const revealObserver = new IntersectionObserver(
+    function (entries, observer) {
 
-    const revealObserver =
-        new IntersectionObserver(
-            function (entries, observer) {
+        entries.forEach(function (entry) {
 
-                entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
 
-                    if (entry.isIntersecting) {
+                entry.target.classList.add("active");
 
-                        entry.target.classList.add("active");
+                observer.unobserve(entry.target);
 
-                        observer.unobserve(
-                            entry.target
-                        );
-
-                    }
-
-                });
-
-            },
-            {
-                threshold: 0.12
             }
-        );
 
-    revealElements.forEach(function (element) {
+        });
 
-        revealObserver.observe(element);
+    },
+    {
+        threshold: 0.12
+    }
+);
 
-    });
 
-} else {
+revealElements.forEach(function (element) {
 
-    revealElements.forEach(function (element) {
+    revealObserver.observe(element);
 
-        element.classList.add("active");
+});
 
-    });
-
-}
 
 
 /* =====================================================
    ACTIVE NAVIGATION
 ===================================================== */
 
-const sections =
-    document.querySelectorAll("section[id]");
-
-const navLinks =
-    document.querySelectorAll(".nav-link");
+const sections = document.querySelectorAll("section[id]");
+const navLinks = document.querySelectorAll(".nav-link");
 
 window.addEventListener("scroll", function () {
 
@@ -124,13 +97,11 @@ window.addEventListener("scroll", function () {
 
     sections.forEach(function (section) {
 
-        const sectionTop =
-            section.offsetTop - 150;
+        const sectionTop = section.offsetTop - 150;
 
         if (window.scrollY >= sectionTop) {
 
-            current =
-                section.getAttribute("id");
+            current = section.getAttribute("id");
 
         }
 
@@ -142,8 +113,7 @@ window.addEventListener("scroll", function () {
         link.classList.remove("active");
 
         if (
-            link.getAttribute("href") ===
-            "#" + current
+            link.getAttribute("href") === "#" + current
         ) {
 
             link.classList.add("active");
@@ -155,87 +125,68 @@ window.addEventListener("scroll", function () {
 });
 
 
+
 /* =====================================================
    COUNTER ANIMATION
 ===================================================== */
 
-const counters =
-    document.querySelectorAll(".counter");
+const counters = document.querySelectorAll(".counter");
 
-if ("IntersectionObserver" in window) {
+const counterObserver = new IntersectionObserver(
+    function (entries, observer) {
 
-    const counterObserver =
-        new IntersectionObserver(
-            function (entries, observer) {
+        entries.forEach(function (entry) {
 
-                entries.forEach(function (entry) {
-
-                    if (!entry.isIntersecting) {
-
-                        return;
-
-                    }
-
-                    const counter =
-                        entry.target;
-
-                    const target =
-                        parseInt(
-                            counter.getAttribute(
-                                "data-target"
-                            )
-                        ) || 0;
-
-                    let current = 0;
-
-                    const duration = 1500;
-
-                    const increment =
-                        target /
-                        (duration / 20);
-
-                    const updateCounter =
-                        setInterval(function () {
-
-                            current += increment;
-
-                            if (current >= target) {
-
-                                counter.innerText =
-                                    target;
-
-                                clearInterval(
-                                    updateCounter
-                                );
-
-                            } else {
-
-                                counter.innerText =
-                                    Math.floor(current);
-
-                            }
-
-                        }, 20);
-
-
-                    observer.unobserve(counter);
-
-                });
-
-            },
-            {
-                threshold: 0.7
+            if (!entry.isIntersecting) {
+                return;
             }
-        );
+
+            const counter = entry.target;
+
+            const target =
+                parseInt(counter.getAttribute("data-target"));
+
+            let current = 0;
+
+            const duration = 1500;
+
+            const increment = target / (duration / 20);
+
+            const updateCounter = setInterval(function () {
+
+                current += increment;
+
+                if (current >= target) {
+
+                    counter.innerText = target;
+
+                    clearInterval(updateCounter);
+
+                } else {
+
+                    counter.innerText = Math.floor(current);
+
+                }
+
+            }, 20);
+
+            observer.unobserve(counter);
+
+        });
+
+    },
+    {
+        threshold: 0.7
+    }
+);
 
 
-    counters.forEach(function (counter) {
+counters.forEach(function (counter) {
 
-        counterObserver.observe(counter);
+    counterObserver.observe(counter);
 
-    });
+});
 
-}
 
 
 /* =====================================================
@@ -245,48 +196,35 @@ if ("IntersectionObserver" in window) {
 const backToTop =
     document.getElementById("backToTop");
 
+
 window.addEventListener("scroll", function () {
 
-    if (backToTop) {
+    if (window.scrollY > 500) {
 
-        if (window.scrollY > 500) {
+        backToTop.classList.add("show");
 
-            backToTop.classList.add("show");
+    } else {
 
-        } else {
-
-            backToTop.classList.remove("show");
-
-        }
+        backToTop.classList.remove("show");
 
     }
 
 });
 
 
-if (backToTop) {
+backToTop.addEventListener("click", function () {
 
-    backToTop.addEventListener(
-        "click",
-        function () {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 
-            window.scrollTo({
+});
 
-                top: 0,
-
-                behavior: "smooth"
-
-            });
-
-        }
-    );
-
-}
 
 
 /* =====================================================
    CONTACT FORM
-   VERCEL API + MONGODB
 ===================================================== */
 
 const contactForm =
@@ -296,218 +234,85 @@ const formMessage =
     document.getElementById("formMessage");
 
 
-if (contactForm) {
+contactForm.addEventListener("submit", async function (event) {
 
-    contactForm.addEventListener(
-        "submit",
-        async function (event) {
+    event.preventDefault();
 
-            event.preventDefault();
+    const name =
+        document.getElementById("name").value.trim();
 
+    const email =
+        document.getElementById("email").value.trim();
 
-            /* =========================================
-               GET FORM VALUES
-            ========================================= */
+    const company =
+        document.getElementById("company").value.trim();
 
-            const name =
-                document
-                    .getElementById("name")
-                    .value
-                    .trim();
+    const product =
+        document.getElementById("product").value;
 
-
-            const email =
-                document
-                    .getElementById("email")
-                    .value
-                    .trim();
+    const message =
+        document.getElementById("message").value.trim();
 
 
-            const company =
-                document
-                    .getElementById("company")
-                    .value
-                    .trim();
+    if (
+        name === "" ||
+        email === "" ||
+        message === ""
+    ) {
+
+        formMessage.innerHTML =
+            '<span style="color:#d93025;">Please fill all required fields.</span>';
+
+        return;
+
+    }
 
 
-            const product =
-                document
-                    .getElementById("product")
-                    .value;
+    const formData = new FormData(contactForm);
 
 
-            const message =
-                document
-                    .getElementById("message")
-                    .value
-                    .trim();
+    formMessage.innerHTML =
+        '<span style="color:#0876c2;">Sending your enquiry...</span>';
 
 
-            /* =========================================
-               REQUIRED FIELD VALIDATION
-            ========================================= */
+    try {
 
-            if (
-                name === "" ||
-                email === "" ||
-                message === ""
-            ) {
-
-                formMessage.innerHTML =
-                    '<span style="color:#d93025;">Please fill all required fields.</span>';
-
-                return;
-
-            }
+        const response = await fetch("backend/submit_inquiry.php", {
+            method: "POST",
+            body: formData
+        });
 
 
-            /* =========================================
-               EMAIL VALIDATION
-            ========================================= */
-
-            const emailPattern =
-                /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const result = await response.json();
 
 
-            if (!emailPattern.test(email)) {
-
-                formMessage.innerHTML =
-                    '<span style="color:#d93025;">Please enter a valid email address.</span>';
-
-                return;
-
-            }
-
-
-            /* =========================================
-               SENDING MESSAGE
-            ========================================= */
+        if (result.success) {
 
             formMessage.innerHTML =
-                '<span style="color:#0876c2;">Sending your enquiry...</span>';
+                '<span style="color:#078d61;">' +
+                result.message +
+                '</span>';
 
+            contactForm.reset();
 
-            /* =========================================
-               DATA
-            ========================================= */
+        } else {
 
-            const inquiryData = {
-
-                name: name,
-
-                email: email,
-
-                company_name: company,
-
-                product: product,
-
-                message: message
-
-            };
-
-
-            /* =========================================
-               SEND TO VERCEL API
-            ========================================= */
-
-            try {
-
-                const response =
-                    await fetch(
-                        "/api/inquiries",
-                        {
-
-                            method: "POST",
-
-                            headers: {
-
-                                "Content-Type":
-                                    "application/json"
-
-                            },
-
-                            body:
-                                JSON.stringify(
-                                    inquiryData
-                                )
-
-                        }
-                    );
-
-
-                /* =====================================
-                   READ RESPONSE
-                ===================================== */
-
-                const result =
-                    await response.json();
-
-
-                /* =====================================
-                   SERVER ERROR
-                ===================================== */
-
-                if (!response.ok) {
-
-                    formMessage.innerHTML =
-                        '<span style="color:#d93025;">' +
-                        (
-                            result.message ||
-                            "Server error. Please try again."
-                        ) +
-                        "</span>";
-
-                    return;
-
-                }
-
-
-                /* =====================================
-                   SUCCESS
-                ===================================== */
-
-                if (result.success) {
-
-                    formMessage.innerHTML =
-                        '<span style="color:#078d61;">' +
-                        result.message +
-                        "</span>";
-
-
-                    contactForm.reset();
-
-                } else {
-
-                    formMessage.innerHTML =
-                        '<span style="color:#d93025;">' +
-                        (
-                            result.message ||
-                            "Unable to save your enquiry."
-                        ) +
-                        "</span>";
-
-                }
-
-
-            } catch (error) {
-
-                console.error(
-                    "API ERROR:",
-                    error
-                );
-
-
-                formMessage.innerHTML =
-                    '<span style="color:#d93025;">' +
-                    "Unable to connect to the server. Please try again." +
-                    "</span>";
-
-            }
+            formMessage.innerHTML =
+                '<span style="color:#d93025;">' +
+                result.message +
+                '</span>';
 
         }
-    );
 
-}
+    } catch (error) {
+
+        formMessage.innerHTML =
+            '<span style="color:#d93025;">Unable to connect to the server. Please try again.</span>';
+
+    }
+
+});
+
 
 
 /* =====================================================
@@ -517,61 +322,48 @@ if (contactForm) {
 const navItems =
     document.querySelectorAll(".nav-link");
 
+
 const navbarCollapse =
     document.getElementById("navbarNav");
 
 
 navItems.forEach(function (item) {
 
-    item.addEventListener(
-        "click",
-        function () {
+    item.addEventListener("click", function () {
 
-            if (
-                window.innerWidth < 992 &&
-                navbarCollapse &&
-                typeof bootstrap !== "undefined"
-            ) {
+        if (window.innerWidth < 992) {
 
-                const bsCollapse =
-                    bootstrap.Collapse.getInstance(
-                        navbarCollapse
-                    );
+            const bsCollapse =
+                bootstrap.Collapse.getInstance(navbarCollapse);
 
-                if (bsCollapse) {
+            if (bsCollapse) {
 
-                    bsCollapse.hide();
-
-                }
+                bsCollapse.hide();
 
             }
 
         }
-    );
+
+    });
 
 });
 
 
+
 /* =====================================================
-   BUTTON EFFECT
+   SMOOTH BUTTON EFFECT
 ===================================================== */
 
 const buttons =
-    document.querySelectorAll(
-        ".primary-btn, .secondary-btn, .contact-btn"
-    );
+    document.querySelectorAll(".primary-btn, .secondary-btn, .contact-btn");
 
 
 buttons.forEach(function (button) {
 
-    button.addEventListener(
-        "mouseenter",
-        function () {
+    button.addEventListener("mouseenter", function () {
 
-            button.style.transition =
-                "0.3s ease";
+        button.style.transition = "0.3s ease";
 
-        }
-    );
+    });
 
 });
